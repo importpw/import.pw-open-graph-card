@@ -1,5 +1,6 @@
 {
   "type": "docker",
+  "alias": "og.import.pw",
   "features": {
     "cloud": "v2"
   }
