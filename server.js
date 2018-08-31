@@ -1,6 +1,10 @@
 const { parse } = require('url');
 const fetch = require('node-fetch');
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas, loadImage, registerFont } = require('canvas');
+registerFont(__dirname + '/fonts/archivo_bold.ttf', {
+  family: 'Archivo',
+  weight: 'bold'
+});
 
 /* Dimensions */
 const WIDTH = 1400;
@@ -25,9 +29,10 @@ module.exports = async (req, res) => {
 
   const canvas = createCanvas(WIDTH, HEIGHT);
   const ctx = canvas.getContext('2d');
+  ctx.patternQuality = 'best';
 
   // Measure title dimensions
-  ctx.font = 'bold 4.4em Arial';
+  ctx.font = 'bold 4.4em Archivo';
   const text = ctx.measureText(repo);
   const textWidth = text.width;
   const textHeight = text.actualBoundingBoxAscent + text.actualBoundingBoxDescent;
