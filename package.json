@@ -1,0 +1,12 @@
+{
+  "name": "import.pw-open-graph-card",
+  "version": "1.0.0",
+  "description": "Dynamically generated Open Graph card for import.pw",
+  "author": "Nathan Rajlich <n@n8.io>",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^2.0.0-alpha.13",
+    "micro": "^9.3.3",
+    "node-fetch": "^2.2.0"
+  }
+}
