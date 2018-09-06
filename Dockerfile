@@ -1,31 +1,30 @@
-FROM mhart/alpine-node:10 as base
-WORKDIR /usr/src
+FROM mhart/alpine-node:10 as build
 RUN apk add --no-cache \
-  git \
-  g++ \
-  build-base \
-  cairo-dev \
-  jpeg-dev \
-  librsvg-dev \
-  pango-dev \
-  freetype-dev \
-  giflib-dev
-COPY package.json .
-RUN yarn install
+	build-base \
+	cairo-dev \
+	freetype-dev \
+	giflib-dev \
+	jpeg-dev \
+	librsvg-dev \
+	pango-dev \
+	python2
+WORKDIR /usr/src
+COPY package.json ./
+RUN yarn --build-from-source --production
 COPY . .
 
-FROM alpine:3.6
-WORKDIR /usr/src
-COPY --from=base /usr/bin/node /usr/bin/
+FROM alpine:3.7
+COPY --from=build /usr/bin/node /usr/bin/
 RUN apk add --no-cache \
-  libstdc++ \
-  cairo \
-  jpeg \
-  librsvg \
-  pango \
-  freetype \
-  giflib \
-  ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family fontconfig
+	cairo \
+	freetype \
+	giflib \
+	jpeg \
+	librsvg \
+	libstdc++ \
+	pango
+WORKDIR /usr/src
+ENV PATH="./node_modules/.bin:$PATH"
 ENV NODE_ENV="production"
-COPY --from=base /usr/src .
-CMD [ "node", "./node_modules/.bin/micro", "server.js" ]
+COPY --from=build /usr/src .
+CMD ["micro"]

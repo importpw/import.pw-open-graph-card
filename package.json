@@ -1,6 +1,7 @@
 {
   "name": "import.pw-open-graph-card",
   "version": "1.0.0",
+  "main": "./server.js",
   "description": "Dynamically generated Open Graph card for import.pw",
   "author": "Nathan Rajlich <n@n8.io>",
   "license": "MIT",
