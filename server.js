@@ -17,6 +17,7 @@ const color = '#ffffff';
 const backgroundColor = '#000000';
 
 const logoPromise = loadImage(__dirname + '/images/import.png');
+const arrowPromise = loadImage(__dirname + '/images/arrow.png');
 
 async function fetchImage(url) {
   const res = await fetch(url);
@@ -45,9 +46,9 @@ module.exports = async (req, res) => {
   const ops = [ logoPromise ];
   if (org) {
     const avatarUrl = `https://github.com/${org}.png`;
-    ops.push(fetchImage(avatarUrl));
+    ops.push(fetchImage(avatarUrl), arrowPromise);
   }
-  const [ logo, avatar ] = await Promise.all(ops);
+  const [ logo, avatar, arrow ] = await Promise.all(ops);
 
   const canvas = createCanvas(WIDTH, HEIGHT);
   const ctx = canvas.getContext('2d');
@@ -93,17 +94,25 @@ module.exports = async (req, res) => {
 
   if (avatar) {
     // Draw avatar
-    let avatarX = (WIDTH / 2) + (padding / 2);
-    let avatarY = (HEIGHT / 2) - avatarHeight - (padding / 2);
+    let avatarX = (WIDTH / 2) + (padding * 2);
+    let avatarY = (HEIGHT / 2) - avatarHeight - padding;
     ctx.drawImage(avatar, avatarX, avatarY, avatarWidth, avatarHeight);
+
+    // Draw arrow
+    let arrowWidth = arrow.width * 0.5;
+    let arrowHeight = arrow.height * 0.5;
+    let arrowX = (WIDTH / 2) - (arrowWidth / 2);
+    let arrowY = (HEIGHT / 2) - (arrowHeight / 2) - (avatarHeight / 2) - padding;
+    ctx.drawImage(arrow, arrowX, arrowY, arrowWidth, arrowHeight);
 
     // Adjust title
     textBaseline = 'top';
     titleX = (WIDTH / 2) - (textWidth / 2);
+    titleY += padding;
 
     // Adjust logo
-    logoX = (WIDTH / 2) - logoWidth - (padding / 2);
-    logoY = (HEIGHT / 2) - logoHeight - (padding / 2);
+    logoX = (WIDTH / 2) - logoWidth - (padding * 2);
+    logoY = (HEIGHT / 2) - logoHeight - padding;
   }
 
   // Draw logo
